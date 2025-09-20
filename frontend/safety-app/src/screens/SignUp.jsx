@@ -3,10 +3,10 @@ import React from 'react'
 import {useNavigation } from '@react-navigation/native';
 
 
-const LoginScreen = () => {
-  const navigation=useNavigation()
-  const handleSignUp=()=>{
-    navigation.navigate("SignUp")
+const SignUp = () => {
+    const navigation=useNavigation()
+  const handleLogin=()=>{
+    navigation.navigate("Login")
 
   }
   return (
@@ -14,11 +14,19 @@ const LoginScreen = () => {
       <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
         <Image style={styles.image} source={require('../assets/login.jpeg')}/>
-        <Text style={styles.title}>Welcome To Suraksha</Text>
-        <Text  style={styles.subtitle}>Please Sign In To Continue</Text>
+        <Text style={styles.title}>Create Account</Text>
+        <View style={styles.row}>
+            <Text style={styles.subtitle}>Already have an account? </Text>
+            <TouchableOpacity onPress={handleLogin}>
+                <Text style={[styles.subtitle,styles.loginLink]}>Login</Text>
+            </TouchableOpacity>
+
+        </View>
+        
 
         <View style={styles.inputWrapper}>
-
+          {/* <Text style={styles.label}>Username</Text> */}
+          <TextInput placeholder="Enter Your Name" style={styles.input}></TextInput>
 
           {/* <Text style={styles.label}>Email</Text> */}
           <TextInput placeholder="Enter Email" style={styles.input}></TextInput>
@@ -28,20 +36,16 @@ const LoginScreen = () => {
           {/* <Text style={styles.label}>Password</Text> */}
           <TextInput placeholder="Enter Password" style={styles.input}></TextInput>
 
-
+          {/* <Text style={styles.label}>Mobile</Text> */}
+          <TextInput placeholder="Enter Mobile" style={styles.input}></TextInput>
         </View>
 
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Sign In</Text>
+          <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
         
-        <View style={styles.row}>
-        <Text style={styles.subtitle}>Don't have an account? </Text>
-          <TouchableOpacity onPress={handleSignUp}>
-            <Text style={[styles.subtitle,styles.loginLink]}>Create</Text>
-          </TouchableOpacity>
-        </View>
-          
+        
+
         
 
         {/* <View>
@@ -55,7 +59,7 @@ const LoginScreen = () => {
   )
 }
 
-export default LoginScreen
+export default SignUp
 
 const styles = StyleSheet.create({
   container: {
@@ -66,8 +70,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, 
   },
   image:{
-    width:260,
-    height:260,
+    width:210,
+    height:210,
     margin:1
     
 
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
-    marginTop: 8,
+    marginTop: 10,
     
     shadowColor: '#000',
     shadowOffset: {
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
     flexDirection:"row", 
     justifyContent:"center",
     alignItems:"center",
-    marginTop:10,
+    marginTop:8,
   }
 });
 

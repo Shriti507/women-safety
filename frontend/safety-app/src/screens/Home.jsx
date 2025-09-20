@@ -1,25 +1,33 @@
 import { StyleSheet, Text, View, TouchableOpacity,Image} from 'react-native'
 import React from 'react'
+import {useNavigation } from '@react-navigation/native';
+
 
 
 
 const Home = () => {
+  const navigation=useNavigation()
+  const handleUser=()=>{
+    navigation.navigate("Login")
+    //navigation.navigate(name that you have given in the app component name)
+  }
   return (
     <>
-
-      <Image style={styles.image} source={require('../assets/home.png')}/>
+    <View style={styles.contentContainer}>
+      <Image style={styles.image} source={require('../assets/home.png')} resizeMode="contain"/>
       <View style={styles.separator}/>
-      <View style={styles.container}>
+      {/* <View style={styles.container}> */}
 
         <Text style={styles.title}>HELLO !</Text>
         <Text style={styles.subtitle}>Welcome to your safety companion, which makes navigating your world safer and simpler.</Text>
     
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleUser}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
         
-      </View>
+      {/* </View> */}
+    </View>
     </>
     
     
@@ -35,6 +43,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 30, 
     paddingTop: 20,
+    backgroundColor: 'white',
+    
   },
   title: {
     fontSize: 32,
