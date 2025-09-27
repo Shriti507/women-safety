@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, SafeAreaView, TouchableOpacity, StatusBar, SafeAreaViewBase,Image } from 'react-native'
 import React from 'react'
 import {useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 const SignUp = () => {
@@ -26,17 +27,28 @@ const SignUp = () => {
 
         <View style={styles.inputWrapper}>
           {/* <Text style={styles.label}>Username</Text> */}
+          <MaterialIcons name="person" size={22} color="#555" style={styles.icon} />
           <TextInput placeholder="Enter Your Name" style={styles.input}></TextInput>
+        </View>
 
-          {/* <Text style={styles.label}>Email</Text> */}
-          <TextInput placeholder="Enter Email" style={styles.input}></TextInput>
-        
+         
+          
+          <View style={styles.inputWrapper}>
+            <MaterialIcons name="email" size={22} color="#555" style={styles.icon} />
+            <TextInput placeholder="Enter Email" style={styles.input} />
+          </View>
+          
 
         
-          {/* <Text style={styles.label}>Password</Text> */}
-          <TextInput placeholder="Enter Password" style={styles.input}></TextInput>
+        <View style={styles.inputWrapper}>
+          <MaterialIcons name="lock" size={22} color="#555" style={styles.icon} />
+          <TextInput placeholder="Enter Password" style={styles.input} secureTextEntry />
+        </View>
 
           {/* <Text style={styles.label}>Mobile</Text> */}
+        <View style={styles.inputWrapper}>
+          <MaterialIcons name="phone" size={22} color="#555" style={styles.icon} />
+
           <TextInput placeholder="Enter Mobile" style={styles.input}></TextInput>
         </View>
 
@@ -88,8 +100,25 @@ const styles = StyleSheet.create({
     marginBottom: 34, 
   },
   inputWrapper: {
+    // width: '100%',
+    // marginBottom: 20,
+    
+    flexDirection: 'row', 
+    alignItems: 'center',
     width: '100%',
-    marginBottom: 20,
+    height: 50,
+    backgroundColor: '#f7f8fa',
+    borderRadius: 30,
+    elevation: 5,
+    shadowColor:'#000',
+    shadowOffset:{width: 0,height: 2 },
+    shadowOpacity:0.25,
+    shadowRadius:3.84,
+    borderColor: '#e0e0e0',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+  
   },
   label: {
     marginBottom: 8,
@@ -98,18 +127,9 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   input: {
-    height: 50,
-    backgroundColor: '#f7f8fa',
-    borderRadius: 30,
-    elevation:20,
-    shadowColor:'#000',
-    shadowOffset:{width: 0,height: 2 },
-    shadowOpacity:0.25,
-    shadowRadius:3.84,
-    paddingHorizontal: 15,
+   
     fontSize: 16,
-    borderColor: '#e0e0e0',
-    borderWidth: 1,
+   
     margin:10
   },
   button: {
