@@ -6,6 +6,8 @@ import Setting from '../screens/Setting'
 import Help from '../screens/Help'
 import { MaterialIcons } from '@expo/vector-icons';
 import About from '../screens/About'
+import Dashboard from '../screens/Dashboard'
+// import CustomDrawer from './CustomDrawer'
 
 
 
@@ -18,6 +20,8 @@ const DrawerNavigator = () => {
       //   backgroundColor:'#bbd0ff'
       // }
     }}>
+    {/* // drawerContent={(props)=><CustomDrawer {...props}/>}> */}
+      <Drawer.Screen name="Dashboard" component={Dashboard}/>
       <Drawer.Screen name="MyProfile" component={MyProfile} 
       options={{
         drawerIcon:({color,size})=>(
@@ -59,6 +63,9 @@ const DrawerNavigator = () => {
         return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'About Us'}</Text>
       }
       }}/>
+
+
+     
 
       
     </Drawer.Navigator>

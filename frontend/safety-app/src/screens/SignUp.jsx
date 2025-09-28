@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, SafeAreaView, TouchableOpacity, Stat
 import React from 'react'
 import {useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { useAuth } from '../context/AuthContext';
 
 const SignUp = () => {
     const navigation=useNavigation()

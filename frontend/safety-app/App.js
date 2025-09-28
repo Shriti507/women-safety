@@ -1,57 +1,42 @@
-// import { StyleSheet, Text, View } from 'react-native'
-// import React from 'react'
-// import LoginScreen from './src/screens/LoginScreen'
-// import Home from './src/screens/Home'
-// import SignUp from './src/screens/SignUp'
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack'
-// import Dashboard from './src/screens/Dashboard'
-// // import { RawButton } from 'react-native-gesture-handler'
-// import 'react-native-gesture-handler';
+import 'react-native-gesture-handler'
+import React from 'react'
+import {View,ActivityIndicator,StyleSheet} from 'react-native'
+import {NavigationContainer} from '@react-navigation/native'
+import {AuthProvider,useAuth} from './src/context/AuthContext'
+import AuthNavigation from './src/navigation/AuthNavigation'
+import DrawerNavigator from './src/navigation/DrawerNavigator'
 
-
-// const Stack =createNativeStackNavigator()
-
-// const App = () => {
-//   return (
-//    <>
-//     <NavigationContainer>
-//       <Stack.Navigator screenOptions={{headerShown:false}}>
-//         <Stack.Screen name="Home" component={Home}/>
-//         <Stack.Screen name="Login" component={LoginScreen}/>
-//         <Stack.Screen name="SignUp" component={SignUp}/>
-//         <Stack.Screen name="Dashboard" component={Dashboard}/>
-
-
-//       </Stack.Navigator>
-      
-//     </NavigationContainer>
-//       {/* <Home/> */}
-//     {/* <LoginScreen/> */}
-//    </>
-     
-    
-//   )
-// }
-
-// export default App
-
-
-import 'react-native-gesture-handler'; 
-import React, { useState, createContext, useContext } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import AuthNavigation from './src/navigation/AuthNavigation';
-import DrawerNavigator from './src/navigation/DrawerNavigator';
-
-const App =()=> {
+const AppNavigator = () => {
+  const {user,isLoading}=useAuth()
+  if (isLoading){
+    return(
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#219ebc" />
+      </View>
+    )
+  }
   return (
-    
-      <NavigationContainer>
-        {/* {userIsSignedIn ? <AppDrawerNavigator /> : <AuthNavigator />} */}
-        {/* <AuthNavigation/> */}
-        <DrawerNavigator/>
-      </NavigationContainer>
+    <NavigationContainer>
+      {user?<DrawerNavigator/>:<AuthNavigation/>}
+    </NavigationContainer>
+  )
+}
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
   );
 };
+
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+  },
+});
 
 export default App;
