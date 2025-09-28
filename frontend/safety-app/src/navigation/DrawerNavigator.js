@@ -1,0 +1,73 @@
+import { View, Text, Settings } from 'react-native'
+import React from 'react'
+import {createDrawerNavigator} from '@react-navigation/drawer'
+import MyProfile from '../screens/MyProfile'
+import Setting from '../screens/Setting'
+import Help from '../screens/Help'
+import { MaterialIcons } from '@expo/vector-icons';
+import About from '../screens/About'
+
+
+
+const Drawer=createDrawerNavigator()
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator screenOptions={{
+      drawerActiveBackgroundColor:'#caf0f8',
+      // drawerStyle:{
+      //   backgroundColor:'#bbd0ff'
+      // }
+    }}>
+      <Drawer.Screen name="MyProfile" component={MyProfile} 
+      options={{
+        drawerIcon:({color,size})=>(
+          // 219ebc
+        <MaterialIcons name="person" size={size} color="#82c0cc"/>
+      ),
+      drawerLabel:({size,focused})=>{
+        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'My Profile'}</Text>
+      }
+      }}/>
+
+      <Drawer.Screen name="Setting" component={Setting} 
+      options={{
+        drawerIcon:({color,size})=>(
+          // 00b4d8
+        <MaterialIcons name="settings" size={size} color="#82c0cc"/>
+      ),
+      drawerLabel:({size,focused})=>{
+        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'Setting'}</Text>
+      }
+      }}/>
+
+      <Drawer.Screen name="Help" component={Help} 
+      options={{drawerIcon:({color,size})=>(
+        // #184e77
+
+        <MaterialIcons name="help" size={size} color="#82c0cc"/>
+      ),
+      drawerLabel:({size,focused})=>{
+        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'Help'}</Text>
+      }
+      }}/>
+      <Drawer.Screen name="About" component={About} 
+      options={{drawerIcon:({color,size})=>(
+        // #82c0cc
+        <MaterialIcons name="people" size={size} color="#82c0cc"/>
+      ),
+      drawerLabel:({size,focused})=>{
+        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'About Us'}</Text>
+      }
+      }}/>
+
+      
+    </Drawer.Navigator>
+  );
+}
+
+export default DrawerNavigator
+
+
+
+
+

@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   },
   loginLink:{
     textDecorationLine: "underline",
-    // color:"#007bff", 
+    
     fontWeight:"400",
   },
   row:{
@@ -167,10 +167,3 @@ const styles = StyleSheet.create({
     marginTop:8,
   }
 });
-
-
-
-
-
-
-
