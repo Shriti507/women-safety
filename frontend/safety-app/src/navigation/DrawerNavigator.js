@@ -40,7 +40,7 @@ const DrawerNavigator = () => {
         <MaterialIcons name="settings" size={size} color="#82c0cc"/>
       ),
       drawerLabel:({size,focused})=>{
-        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'Setting'}</Text>
+        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'Settings'}</Text>
       }
       }}/>
 

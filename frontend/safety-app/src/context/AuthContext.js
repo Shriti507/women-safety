@@ -13,6 +13,7 @@ export const AuthProvider=({children})=>{
     // const [latitude,setLatitude]=useState()
     // const [longitude,setLongitude]=useState()
     const [location,setLocation]=useState()
+    const [permissionStatus,setPermissionStatus]=useState(null)
 
     useEffect(()=>{
         const checkLogIn=async()=>{
@@ -64,7 +65,7 @@ export const AuthProvider=({children})=>{
 
 
     return (
-        <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,login,logout,location,setLocation}}>
+        <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,login,logout,location,setLocation,permissionStatus,setPermissionStatus}}>
             {children}
         </AuthContext.Provider>
     )
