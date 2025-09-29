@@ -10,6 +10,9 @@ const AuthContext = createContext(null)
 export const AuthProvider=({children})=>{
     const [user,setUser]=useState("hello")
     const [isLoading,setIsLoading]=useState(true)
+    // const [latitude,setLatitude]=useState()
+    // const [longitude,setLongitude]=useState()
+    const [location,setLocation]=useState()
 
     useEffect(()=>{
         const checkLogIn=async()=>{
@@ -61,7 +64,7 @@ export const AuthProvider=({children})=>{
 
 
     return (
-        <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,login,logout}}>
+        <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,login,logout,location,setLocation}}>
             {children}
         </AuthContext.Provider>
     )
