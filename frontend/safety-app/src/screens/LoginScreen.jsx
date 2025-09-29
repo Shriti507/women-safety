@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TextInput, SafeAreaView, TouchableOpacity, Stat
 import React from 'react'
 import {useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useAuth } from '../context/AuthContext';
 
 
 
@@ -9,12 +10,20 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const LoginScreen = () => {
   const navigation=useNavigation()
+
+  const {signIn}=useAuth()
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  
+  const handleSignIn = () => {
+    signIn(email, password)
+    navigation.navigate("Dashboard")
+  }
+  
   const handleSignUp=()=>{
     navigation.navigate("SignUp")
 
-  }
-  const handleButton=()=>{
-    navigation.navigate("Dashboard")
   }
   
   return (
@@ -28,19 +37,19 @@ const LoginScreen = () => {
         {/* Email */}
       <View style={styles.inputWrapper}>
         <MaterialIcons name="email" size={22} color="#555" style={styles.icon} />
-        <TextInput placeholder="Enter Email" style={styles.input} />
+        <TextInput placeholder="Enter Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" style={styles.input} />
       </View>
 
       {/* Password */}
       <View style={styles.inputWrapper}>
         <MaterialIcons name="lock" size={22} color="#555" style={styles.icon} />
-        <TextInput placeholder="Enter Password" style={styles.input} secureTextEntry />
+        <TextInput placeholder="Enter Password" style={styles.input} secureTextEntry value={password} onChangeText={setPassword} />
       </View>
 
 
-        <TouchableOpacity style={styles.button} onPress={handleButton}>
-          <Text style={styles.buttonText}>Sign In</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
         
         <View style={styles.row}>
         <Text style={styles.subtitle}>Don't have an account? </Text>
@@ -48,6 +57,8 @@ const LoginScreen = () => {
             <Text style={[styles.subtitle,styles.loginLink]}>Create</Text>
           </TouchableOpacity>
         </View>
+
+       
           
         
 

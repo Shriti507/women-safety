@@ -52,7 +52,7 @@ const SignUp = () => {
           <TextInput placeholder="Enter Mobile" style={styles.input}></TextInput>
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
         

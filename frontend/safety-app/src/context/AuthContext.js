@@ -8,13 +8,34 @@ const AuthContext = createContext(null)
 
 //create provide component
 export const AuthProvider=({children})=>{
-    const [user,setUser]=useState("hello")
+    const [user,setUser]=useState("")
     const [isLoading,setIsLoading]=useState(true)
     // const [latitude,setLatitude]=useState()
     // const [longitude,setLongitude]=useState()
+
     const [location,setLocation]=useState()
     const [permissionStatus,setPermissionStatus]=useState(null)
 
+
+    const signIn = (email, password) => {
+        console.log("Attempting to sign in...")
+        setUser({ name: 'User Name', email: email })
+        console.log("User has been set.");
+      };
+    
+      const signOut = () => {
+        setUser(null);
+      };
+    
+      const value = {
+        user,
+        isLoading,
+        signIn,
+        signOut,
+      };
+    
+   
+  
     useEffect(()=>{
         const checkLogIn=async()=>{
             try{
@@ -65,7 +86,7 @@ export const AuthProvider=({children})=>{
 
 
     return (
-        <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,login,logout,location,setLocation,permissionStatus,setPermissionStatus}}>
+        <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,login,logout,location,setLocation,permissionStatus,setPermissionStatus,signIn}}>
             {children}
         </AuthContext.Provider>
     )
