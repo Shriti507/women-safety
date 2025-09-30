@@ -106,7 +106,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center',
     width: '100%',
-    height: 50,
+    // height: 50,
+    paddingVertical: 12,
     backgroundColor: '#f7f8fa',
     borderRadius: 30,
     elevation: 5,
@@ -127,10 +128,11 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   input: {
-   
+    flex: 1,
     fontSize: 16,
+    paddingVertical: 0,
    
-    margin:10
+    // margin:10
   },
   button: {
     width: '100%',
@@ -165,5 +167,8 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     alignItems:"center",
     marginTop:8,
+  },
+  icon: {
+    marginRight: 10,
   }
 });

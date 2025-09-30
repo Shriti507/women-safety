@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center',
     width: '100%',
-    height: 50,
+    paddingVertical: 12,
+    // height: 50,
     backgroundColor: '#f7f8fa',
     borderRadius: 30,
     elevation: 5,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   input: {
-    
+    paddingVertical: 0,
     fontSize: 16,
     margin:10
   },
