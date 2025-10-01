@@ -3,6 +3,8 @@ import React from 'react'
 import {useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
+import Dashboard from './Dashboard';
+// import LoginScreen from './screens/LoginScreen';
 
 
 
