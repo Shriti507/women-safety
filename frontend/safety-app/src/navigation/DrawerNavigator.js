@@ -7,6 +7,8 @@ import Help from '../screens/Help'
 import { MaterialIcons } from '@expo/vector-icons';
 import About from '../screens/About'
 import Dashboard from '../screens/Dashboard'
+import HelpLine from '../screens/HelpLine';
+
 // import CustomDrawer from './CustomDrawer'
 
 
@@ -65,7 +67,15 @@ const DrawerNavigator = () => {
       }}/>
 
 
-     
+<Drawer.Screen name="HelpLine" component={HelpLine} 
+      options={{drawerIcon:({color,size})=>(
+        // #82c0cc
+        <MaterialIcons name="book" size={size} color="#82c0cc"/>
+      ),
+      drawerLabel:({size,focused})=>{
+        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'Helpline'}</Text>
+      }
+      }}/>
 
       
     </Drawer.Navigator>
