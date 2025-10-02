@@ -18,7 +18,7 @@ const About = () => {
 
         
         <View style={styles.section}>
-          <Feather name="shield" size={32} color="#4A4A4A" />
+          <Feather name="shield" size={32} color="#415a77" />
           <Text style={styles.sectionTitle}>OUR MISSION</Text>
           <Text style={styles.sectionText}>
             To build a world where every woman can move with confidence and without fear. We use technology not just to react, but to proactively build a network of safety and support.
