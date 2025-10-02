@@ -38,14 +38,14 @@ const About = () => {
             </View>
           </View>
           <View style={styles.featureItem}>
-            <Ionicons name="location-outline" size={28} color="#FF6347" style={styles.featureIcon} />
+            <Ionicons name="location-outline" size={28} color="blue" style={styles.featureIcon} />
             <View style={styles.featureTextContainer}>
               <Text style={styles.featureTitle}>Live Safety Sharing</Text>
               <Text style={styles.featureDescription}>Let friends and family follow your journey in real-time for peace of mind.</Text>
             </View>
           </View>
           <View style={styles.featureItem}>
-            <Ionicons name="people-outline" size={28} color="#FF6347" style={styles.featureIcon} />
+            <Ionicons name="people-outline" size={28} color="blue" style={styles.featureIcon} />
             <View style={styles.featureTextContainer}>
               <Text style={styles.featureTitle}>Your Safety Network</Text>
               <Text style={styles.featureDescription}>Build a reliable circle of protectors who are there for you when you need them.</Text>
@@ -68,14 +68,14 @@ const About = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>OUR COMMITMENT TO YOU</Text>
            <View style={styles.featureItem}>
-            <Ionicons name="lock-closed-outline" size={28} color="#FF6347" style={styles.featureIcon} />
+            <Ionicons name="lock-closed-outline" size={28} color="blue" style={styles.featureIcon} />
             <View style={styles.featureTextContainer}>
               <Text style={styles.featureTitle}>Privacy First</Text>
               <Text style={styles.featureDescription}>Your data is yours. We use state-of-the-art encryption and will never compromise your privacy.</Text>
             </View>
           </View>
            <View style={styles.featureItem}>
-            <Ionicons name="checkmark-circle-outline" size={28} color="#FF6347" style={styles.featureIcon} />
+            <Ionicons name="checkmark-circle-outline" size={28} color="blue" style={styles.featureIcon} />
             <View style={styles.featureTextContainer}>
               <Text style={styles.featureTitle}>Unwavering Reliability</Text>
               <Text style={styles.featureDescription}>Rigorously tested to ensure our app works when it matters most.</Text>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ctaButton: {
-    backgroundColor: '#FF6347',
+    backgroundColor: '#415a77',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 30,
