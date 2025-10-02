@@ -31,7 +31,7 @@ const About = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>HOW WE HELP</Text>
           <View style={styles.featureItem}>
-            <Ionicons name="notifications-outline" size={28} color="#FF6347" style={styles.featureIcon} />
+            <Ionicons name="notifications-outline" size={28} color="blue" style={styles.featureIcon} />
             <View style={styles.featureTextContainer}>
               <Text style={styles.featureTitle}>Instant Alerts</Text>
               <Text style={styles.featureDescription}>Notify your trusted contacts and emergency services with a single tap.</Text>
