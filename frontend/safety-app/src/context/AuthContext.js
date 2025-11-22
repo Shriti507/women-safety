@@ -3,14 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { supabase } from '../../utils/supabaseClient.js';
 
 
-//create context
+
 const AuthContext = createContext(null)
 
-
-//create provide component
 export const AuthProvider=({children})=>{
     const [user,setUser]=useState(null)
-
 
     const [isLoading,setIsLoading]=useState(true)
     // const [latitude,setLatitude]=useState()
@@ -20,51 +17,71 @@ export const AuthProvider=({children})=>{
     const [permissionStatus,setPermissionStatus]=useState(null)
      
 
-const register = async (email, password, fullName, mobile) => {
-    const { data, error } = await supabase.auth.signUp({
-      email:email,
-      password:password,
-      options:{
-        data:{
-          full_name:fullName,
-          phone:mobile, 
+    const register = async (email, password, fullName, mobile) => {
+        const { data, error } = await supabase.auth.signUp({
+        email:email,
+        password:password,
+        options:{
+            data:{
+            full_name:fullName,
+            phone:mobile, 
+            },
         },
-      },
-    });
-  
-    if (error) throw error;
-    return data;
-  };
-  
-  
- 
-useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user || null);
-      } catch (error) {
-        console.log("Error checking session:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+        })
     
-    checkSession();
+        if (error) throw error
+        return data
+    }
 
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth Event:", event);
-      setUser(session?.user || null);
-      setIsLoading(false);
-    });
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        // const { data:{session}}=await supabase.auth.getSession()
+    //    ask the server for the user
+        const { data: { user},error }=await supabase.auth.getUser()
+
+        if (error||!user) {
+            console.log("User not found on server, logging out...")
+            setUser(null)
+        } 
+        else {
+            setUser(user)
+        }
+      } 
+      catch (error) {
+        console.log("Error checking session:", error)
+        setUser(null)
+      } 
+      finally {
+        setIsLoading(false)
+      }
+    }
+    
+    checkUser()
+
+
+    const { data:authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      // If the token becomes invalid (because user is deleted), Supabase eventually fires SIGNED_OUT
+      if (event==='SIGNED_OUT') {
+        setUser(null)
+      } 
+      else {
+        setUser(session?.user|| null)
+      }
+
+      setIsLoading(false)
+    })
 
     return () => {
       authListener.subscription.unsubscribe();
-    };
-  }, []);
+    }
+  }, [])
+  
 
-  const login = async (email, password) => {
+
+
+const login = async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -79,6 +96,8 @@ useEffect(() => {
     if (error) console.error("Error signing out:", error.message);
     setUser(null);
   };
+
+
   return (
             <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,logout,location,setLocation,permissionStatus,setPermissionStatus,login,register}}>
                 {children}
@@ -88,6 +107,6 @@ useEffect(() => {
   
    
   
-};
+}
 
 export const useAuth = () => useContext(AuthContext);
