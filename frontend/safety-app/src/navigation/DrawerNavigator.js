@@ -2,7 +2,7 @@ import { View, Text, Settings } from 'react-native'
 import React from 'react'
 import {createDrawerNavigator} from '@react-navigation/drawer'
 import MyProfile from '../screens/MyProfile'
-import Setting from '../screens/Setting'
+import Setting from '../screens/Settings'
 import Help from '../screens/Help'
 import { MaterialIcons } from '@expo/vector-icons';
 import About from '../screens/About'
@@ -35,7 +35,7 @@ const DrawerNavigator = () => {
       }
       }}/>
 
-      <Drawer.Screen name="Setting" component={Setting} 
+      <Drawer.Screen name="Settings" component={Setting} 
       options={{
         drawerIcon:({color,size})=>(
           // 00b4d8

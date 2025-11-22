@@ -1,77 +1,89 @@
-import { StyleSheet, Text, View, TextInput, SafeAreaView, TouchableOpacity, StatusBar, SafeAreaViewBase,Image } from 'react-native'
-import React from 'react'
-import {useNavigation } from '@react-navigation/native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, Alert, ActivityIndicator } from 'react-native'
+import React,{ useState } from 'react'
+import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
-import Dashboard from './Dashboard';
-// import LoginScreen from './screens/LoginScreen';
-
-
-
-
 
 const LoginScreen = () => {
   const navigation=useNavigation()
+  const {login}=useAuth()
 
-  const {signIn}=useAuth()
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
+  const [email, setEmail]=useState('')
+  const [password, setPassword]=useState('')
+  const [isSubmitting, setIsSubmitting]=useState(false)
   
-  const handleSignIn = () => {
-    signIn(email, password)
-    navigation.navigate("Dashboard")
+
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter both email and password.")
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      // console.log("Attempting login with:", email)
+      const { data, error } = await login(email, password)
+      
+      // console.log("Login Success!")
+
+
+    } catch (error) {
+    //   console.log("Login Error:", error.message)
+      Alert.alert("Login Failed", error.message)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
-  
-  const handleSignUp=()=>{
-    navigation.navigate("SignUp")
 
+  const handleSignUp = () => {
+    navigation.navigate("SignUp")
   }
   
   return (
-    <>
-      <View style={styles.container}>
+    <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-        <Image style={styles.image} source={require('../assets/login.jpeg')}/>
-        <Text style={styles.title}>Welcome To Suraksha</Text>
-        <Text  style={styles.subtitle}>Please Sign In To Continue</Text>
+      <Image style={styles.image} source={require('../assets/login.jpeg')}/>
+      <Text style={styles.title}>Welcome To Suraksha</Text>
+      <Text style={styles.subtitle}>Please Sign In To Continue</Text>
 
-        {/* Email */}
       <View style={styles.inputWrapper}>
         <MaterialIcons name="email" size={22} color="#555" style={styles.icon} />
-        <TextInput placeholder="Enter Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" style={styles.input} />
+        <TextInput 
+          placeholder="Enter Email" 
+          value={email} 
+          onChangeText={setEmail} 
+          keyboardType="email-address" 
+          autoCapitalize="none" 
+          style={styles.input} 
+        />
       </View>
 
-      {/* Password */}
       <View style={styles.inputWrapper}>
         <MaterialIcons name="lock" size={22} color="#555" style={styles.icon} />
-        <TextInput placeholder="Enter Password" style={styles.input} secureTextEntry value={password} onChangeText={setPassword} />
+        <TextInput 
+          placeholder="Enter Password" 
+          style={styles.input} 
+          secureTextEntry 
+          value={password} 
+          onChangeText={setPassword} 
+        />
       </View>
 
-
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonText}>Sign In</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignIn} disabled={isSubmitting}>
+        {isSubmitting ? (
+           <ActivityIndicator color="white" />
+        ) : (
+           <Text style={styles.buttonText}>Sign In</Text>
+        )}
       </TouchableOpacity>
         
-        <View style={styles.row}>
+      <View style={styles.row}>
         <Text style={styles.subtitle}>Don't have an account? </Text>
-          <TouchableOpacity onPress={handleSignUp}>
-            <Text style={[styles.subtitle,styles.loginLink]}>Create</Text>
-          </TouchableOpacity>
-        </View>
-
-       
-          
-        
-
-        {/* <View>
-          <Text>Already have </Text>
-        </View> */}
-        
-        
+        <TouchableOpacity onPress={handleSignUp}>
+          <Text style={[styles.subtitle,styles.loginLink]}>Create</Text>
+        </TouchableOpacity>
       </View>
-    </>
-    
+    </View>
   )
 }
 
@@ -178,9 +190,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-
-
-
-
-

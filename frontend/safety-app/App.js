@@ -43,9 +43,6 @@ const AppNavigator = () => {
 const App = () => {
   return (
     <>
-
-   
-     
       <AuthProvider>
       <CallProvider>
         <AppNavigator />

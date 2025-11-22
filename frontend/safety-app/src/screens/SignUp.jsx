@@ -1,77 +1,128 @@
 import { StyleSheet, Text, View, TextInput, SafeAreaView, TouchableOpacity, StatusBar, SafeAreaViewBase,Image } from 'react-native'
-import React from 'react'
+import React,{useState} from 'react'
 import {useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 
 const SignUp = () => {
-    const navigation=useNavigation()
-  const handleLogin=()=>{
-    navigation.navigate("Login")
+  const navigation=useNavigation()
+  const { register }=useAuth()
 
+  const [name,setName] = useState('')
+  const [email,setEmail] = useState('')
+  const [password,setPassword] = useState('')
+  const [mobile,setMobile] = useState('')
+  const [isSubmitting,setIsSubmitting] = useState(false)
+
+  const handleLogin = () => {
+    navigation.navigate("Login");
   }
+
+  const handleSignUp = async () => {
+    if (!name||!email ||!password || !mobile) {
+      Alert.alert("Error", "Please fill in all fields");
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      await register(email, password, name, mobile)
+      Alert.alert(
+        "Success", 
+        "Account created! Please check your email to confirm.",
+        [{ text: "OK", onPress: () => navigation.navigate("Login") }]
+      )
+    } catch(error) {
+      Alert.alert("Registration Failed", error.message)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <>
       <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="dark-content" />
         <Image style={styles.image} source={require('../assets/login.jpeg')}/>
         <Text style={styles.title}>Create Account</Text>
+        
         <View style={styles.row}>
             <Text style={styles.subtitle}>Already have an account? </Text>
             <TouchableOpacity onPress={handleLogin}>
-                <Text style={[styles.subtitle,styles.loginLink]}>Login</Text>
+                <Text style={[styles.subtitle, styles.loginLink]}>Login</Text>
             </TouchableOpacity>
-
         </View>
         
-
+        {/* Name Input */}
         <View style={styles.inputWrapper}>
-          {/* <Text style={styles.label}>Username</Text> */}
           <MaterialIcons name="person" size={22} color="#555" style={styles.icon} />
-          <TextInput placeholder="Enter Your Name" style={styles.input}></TextInput>
+          <TextInput 
+            placeholder="Enter Your Name" 
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+          />
         </View>
 
-         
+        {/* Email Input */}
+        <View style={styles.inputWrapper}>
+          <MaterialIcons name="email" size={22} color="#555" style={styles.icon} />
+          <TextInput 
+            placeholder="Enter Email" 
+            style={styles.input} 
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
           
-          <View style={styles.inputWrapper}>
-            <MaterialIcons name="email" size={22} color="#555" style={styles.icon} />
-            <TextInput placeholder="Enter Email" style={styles.input} />
-          </View>
-          
-
-        
+        {/* Password Input */}
         <View style={styles.inputWrapper}>
           <MaterialIcons name="lock" size={22} color="#555" style={styles.icon} />
-          <TextInput placeholder="Enter Password" style={styles.input} secureTextEntry />
+          <TextInput 
+            placeholder="Enter Password" 
+            style={styles.input} 
+            secureTextEntry 
+            value={password}
+            onChangeText={setPassword}
+          />
         </View>
 
-          {/* <Text style={styles.label}>Mobile</Text> */}
+        {/* Mobile Input */}
         <View style={styles.inputWrapper}>
           <MaterialIcons name="phone" size={22} color="#555" style={styles.icon} />
-
-          <TextInput placeholder="Enter Mobile" style={styles.input}></TextInput>
+          <TextInput 
+            placeholder="Enter Mobile" 
+            style={styles.input}
+            keyboardType="phone-pad"
+            value={mobile}
+            onChangeText={setMobile}
+          />
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Create Account</Text>
+        {/* Button handles SignUp */}
+        <TouchableOpacity 
+          style={styles.button} 
+          onPress={handleSignUp}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <ActivityIndicator color="#fff" />
+          ) 
+          : 
+          (
+            <Text style={styles.buttonText}>Create Account</Text>
+          )}
         </TouchableOpacity>
-        
-        
-
-        
-
-        {/* <View>
-          <Text>Already have </Text>
-        </View> */}
-        
         
       </View>
     </>
-    
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
@@ -171,4 +222,5 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 10,
   }
+    
 });

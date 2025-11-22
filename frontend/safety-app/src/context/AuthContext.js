@@ -1,5 +1,6 @@
 import React,{createContext,useContext,useState,useEffect} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { supabase } from '../../utils/supabaseClient.js';
 
 
 //create context
@@ -8,92 +9,85 @@ const AuthContext = createContext(null)
 
 //create provide component
 export const AuthProvider=({children})=>{
-    const [user,setUser]=useState("")
+    const [user,setUser]=useState(null)
+
+
     const [isLoading,setIsLoading]=useState(true)
     // const [latitude,setLatitude]=useState()
     // const [longitude,setLongitude]=useState()
 
     const [location,setLocation]=useState()
     const [permissionStatus,setPermissionStatus]=useState(null)
+     
+
+const register = async (email, password, fullName, mobile) => {
+    const { data, error } = await supabase.auth.signUp({
+      email:email,
+      password:password,
+      options:{
+        data:{
+          full_name:fullName,
+          phone:mobile, 
+        },
+      },
+    });
+  
+    if (error) throw error;
+    return data;
+  };
+  
+  
+ 
+useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user || null);
+      } catch (error) {
+        console.log("Error checking session:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    checkSession();
 
 
-    const signIn = (email, password) => {
-        console.log("Attempting to sign in...")
-        setUser({ name: 'User Name', email: email })
-        console.log("User has been set.");
-      };
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth Event:", event);
+      setUser(session?.user || null);
+      setIsLoading(false);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const login = async (email, password) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     
-      const signOut = () => {
-        setUser(null);
-      };
-    
-      const value = {
-        user,
-        isLoading,
-        signIn,
-        signOut,
-      };
-    
+    if (error) throw error
+    return data;
+  };
+
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error("Error signing out:", error.message);
+    setUser(null);
+  };
+  return (
+            <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,logout,location,setLocation,permissionStatus,setPermissionStatus,login,register}}>
+                {children}
+            </AuthContext.Provider>
+        )
+
+  
    
   
-    useEffect(()=>{
-        const checkLogIn=async()=>{
-            try{
-                // get item from the async storage if present
-                const getUser=await AsyncStorage.getItem('user')
+};
 
-                if (getUser){
-                    const userData=JSON.parse(getUser)
-                    setUser(userData)
-                }
-
-            }
-            catch(err){
-                console.log("Failed to load the user data.")
-            }
-            finally{
-                setIsLoading(false)
-            }
-        }
-        checkLogIn()
-    },[])
-
-
-
-    const login=async (userData)=>{
-        try{
-            setUser(userData)
-            
-            // store data in the async storage
-            await AsyncStorage.setItem('user',JSON.stringify(userData))
-        }
-        catch(err){
-            console.log("Failed to save data")
-        }
-
-    }
-
-    const logout=async ()=>{
-        try{
-            // clear the user 
-            setUser(null)
-            await AsyncStorage.removeItem('user')
-        }
-        catch(err){
-            console.log("Failed to remove the data")
-        }
-    }
-
-
-    return (
-        <AuthContext.Provider value={{user,isLoading,setIsLoading,setUser,login,logout,location,setLocation,permissionStatus,setPermissionStatus,signIn}}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
-
-
-export const useAuth=()=>{
-    return useContext(AuthContext);
-}
-
+export const useAuth = () => useContext(AuthContext);
