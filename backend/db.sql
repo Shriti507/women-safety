@@ -23,3 +23,26 @@ create policy "Users can insert their own profile."
 create policy "Users can update own profile."
   on profiles for update
   using ( auth.uid() = id );
+
+
+
+ALTER TABLE public.profiles 
+ADD COLUMN country_code text;
+
+
+
+-- delete the current user's account
+create or replace function delete_user()
+returns void as $$
+begin
+
+  -- Delete row from the profiles table 
+  delete from public.profiles where id = auth.uid(); 
+  
+  -- Delete the actual user from auth.users (requires specific RLS policy)
+  delete from auth.users where id = auth.uid();
+end;
+$$ language plpgsql security definer;
+
+-- Grant execution rights to authenticated users
+grant execute on function public.delete_user() to authenticated;

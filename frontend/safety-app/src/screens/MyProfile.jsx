@@ -1,38 +1,120 @@
-import {View,Text,TextInput,ScrollView,Pressable,StyleSheet,Alert} from 'react-native'
-import {useState} from 'react'
+import {View,Text,TextInput,ScrollView,Pressable,StyleSheet,Alert,ActivityIndicator} from 'react-native'
+import {useState,useEffect} from 'react'
+import 'react-native-url-polyfill/auto'
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 
 const MyProfile = () => {
   // State to hold user data
-  const [firstName, setFirstName]=useState("Jessica")
-  const [lastName, setLastName]=useState("Jane")
-  const [email, setEmail]=useState("jessica.jane@example.com")
+  const [isLoading, setIsLoading] = useState(true);
+  const [fullName, setFullName]=useState("")
+  // const [lastName, setLastName]=useState("Jane")
+  const [email, setEmail]=useState("")
   const [countryCode, setCountryCode]=useState("+91")
-  const [phone, setPhone]=useState("1234567890")
-  const [password, setPassword]=useState("password123")
-  const handleButton=()=>{
-    Alert.alert("Updated Successfully");
+  const [phone, setPhone]=useState("")
+  const [password, setPassword]=useState("")
+
+
+  useEffect(() => {
+    fetchProfileData()
+  }, [])
+
+
+  const fetchProfileData = async() =>{
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+      if (authError ||!user) {
+        console.log("No user logged in");
+        setIsLoading(false)
+        return
+      }
+
+      
+      
+      const { data, error } = await supabase
+        .from('profiles') //table name profiles
+        .select('*')
+        .eq('id', user.id) 
+        // .single();
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        setFullName(data.full_name || "")
+        // setLastName(data.last_name || "")
+        setEmail(user.email || "")
+        setCountryCode(data.country_code || "+91")
+        setPhone(data.phone_number || "")
+        // setPassword(data.password); // Only if you actually stored it in the table (Unsafe)
+      }
+
+    } catch (error) {
+      Alert.alert("Error fetching data", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleButton=async ()=>{
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if(!user) return;
+
+      const updates = {
+        id: user.id,
+        full_name: fullName,
+        // last_name: lastName,
+        country_code: countryCode,
+        phone_number: phone,
+        updated_at: new Date(),
+      };
+      const { error } = await supabase.from('profiles').upsert(updates);
+
+      if (error) throw error;
+      Alert.alert("Updated Successfully");
+      
+    } 
+    catch (error) {
+      Alert.alert("Update Failed", error.message);
+    }
   }
 
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center' }]}>
+        <ActivityIndicator size="large" color="#219ebc" />
+        <Text style={{marginTop: 10}}>Loading Profile...</Text>
+      </View>
+    )
+  }
 
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>First Name</Text>
+      <Text style={styles.label}>Full Name</Text>
       <TextInput
-        placeholder="Enter your first name"
+        placeholder="Enter your full name"
         style={styles.input}
-        value={firstName}
-        onChangeText={setFirstName}
+        value={fullName}
+        onChangeText={setFullName}
       />
-
+{/* 
       <Text style={styles.label}>Last Name</Text>
       <TextInput
         placeholder="Enter your last name"
         style={styles.input}
         value={lastName}
         onChangeText={setLastName}
-      />
+      /> */}
 
       
       <Text style={styles.label}>Email</Text>
@@ -112,7 +194,8 @@ input:{
   borderColor:"#888",  
   paddingVertical:8,   
   paddingHorizontal:5,
-  marginBottom:20,      
+  marginBottom:16, 
+  // marginTop:5,     
   fontSize: 18,         
 },
   button:{

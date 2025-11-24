@@ -1,5 +1,5 @@
 import React from 'react'
-import 'react-native-gesture-handler';
+// import 'react-native-gesture-handler';
 import LoginScreen from '../screens/LoginScreen'
 import Home from '../screens/Home'
 import SignUp from '../screens/SignUp'

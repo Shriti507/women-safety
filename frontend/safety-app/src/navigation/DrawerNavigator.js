@@ -8,6 +8,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import About from '../screens/About'
 import Dashboard from '../screens/Dashboard'
 import HelpLine from '../screens/HelpLine';
+import Logout from '../screens/Logout';
+
 
 // import CustomDrawer from './CustomDrawer'
 
@@ -77,6 +79,15 @@ const DrawerNavigator = () => {
       }
       }}/>
 
+<Drawer.Screen name="Logout" component={Logout} 
+      options={{drawerIcon:({color,size})=>(
+        // #82c0cc
+        <MaterialIcons name="logout" size={size} color="#82c0cc"/>
+      ),
+      drawerLabel:({size,focused})=>{
+        return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'Logout'}</Text>
+      }
+      }}/>
       
     </Drawer.Navigator>
   );

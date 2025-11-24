@@ -29,7 +29,15 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+    "expo-router",
+    [
+      "expo-camera",
+      {
+        "cameraPermission": "Allow Women Safety-App to access your camera to record evidence.",
+        "microphonePermission": "Allow Women Safety-App to access your microphone for video sound.",
+        "recordAudioAndroid": true
+      }
     ]
+  ]
   }
 }
