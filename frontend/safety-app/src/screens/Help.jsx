@@ -22,6 +22,8 @@ const Help = ({navigation}) => {
     <PaperProvider>
       <View style={styles.container}>
       <CardComp title="Video Recording" onPress={showModal} />
+      <CardComp title="Emergency Contacts" onPress={showModal} />
+
         
       </View>
     </PaperProvider>
