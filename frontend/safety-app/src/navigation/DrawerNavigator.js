@@ -9,27 +9,20 @@ import About from '../screens/About'
 import Dashboard from '../screens/Dashboard'
 import HelpLine from '../screens/HelpLine';
 import Logout from '../screens/Logout';
-
-
-// import CustomDrawer from './CustomDrawer'
-
-
+import ContactsScreen from '../screens/ContactsScreen';
 
 const Drawer=createDrawerNavigator()
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator screenOptions={{
       drawerActiveBackgroundColor:'#caf0f8',
-      // drawerStyle:{
-      //   backgroundColor:'#bbd0ff'
-      // }
     }}>
-    {/* // drawerContent={(props)=><CustomDrawer {...props}/>}> */}
+    
       <Drawer.Screen name="Dashboard" component={Dashboard}/>
       <Drawer.Screen name="MyProfile" component={MyProfile} 
       options={{
         drawerIcon:({color,size})=>(
-          // 219ebc
+          
         <MaterialIcons name="person" size={size} color="#82c0cc"/>
       ),
       drawerLabel:({size,focused})=>{
@@ -40,7 +33,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Settings" component={Setting} 
       options={{
         drawerIcon:({color,size})=>(
-          // 00b4d8
+          
         <MaterialIcons name="settings" size={size} color="#82c0cc"/>
       ),
       drawerLabel:({size,focused})=>{
@@ -50,7 +43,7 @@ const DrawerNavigator = () => {
 
       <Drawer.Screen name="Help" component={Help} 
       options={{drawerIcon:({color,size})=>(
-        // #184e77
+        
 
         <MaterialIcons name="help" size={size} color="#82c0cc"/>
       ),
@@ -60,7 +53,7 @@ const DrawerNavigator = () => {
       }}/>
       <Drawer.Screen name="About" component={About} 
       options={{drawerIcon:({color,size})=>(
-        // #82c0cc
+        
         <MaterialIcons name="people" size={size} color="#82c0cc"/>
       ),
       drawerLabel:({size,focused})=>{
@@ -71,7 +64,7 @@ const DrawerNavigator = () => {
 
 <Drawer.Screen name="HelpLine" component={HelpLine} 
       options={{drawerIcon:({color,size})=>(
-        // #82c0cc
+        
         <MaterialIcons name="book" size={size} color="#82c0cc"/>
       ),
       drawerLabel:({size,focused})=>{
@@ -81,13 +74,24 @@ const DrawerNavigator = () => {
 
 <Drawer.Screen name="Logout" component={Logout} 
       options={{drawerIcon:({color,size})=>(
-        // #82c0cc
+       
         <MaterialIcons name="logout" size={size} color="#82c0cc"/>
       ),
       drawerLabel:({size,focused})=>{
         return <Text style={{color: focused ? 'grey': 'black',fontSize:16}}>{'Logout'}</Text>
       }
       }}/>
+
+<Drawer.Screen 
+        name="Contacts" 
+        component={ContactsScreen} 
+        options={{
+          drawerLabel:()=>null, 
+          title:null, 
+          drawerIcon:()=>null, 
+          drawerItemStyle:{display:'none' } 
+        }}
+      />
       
     </Drawer.Navigator>
   );
