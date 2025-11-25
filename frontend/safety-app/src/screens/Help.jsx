@@ -1,44 +1,46 @@
-import { View, Text, TouchableOpacity,StyleSheet } from 'react-native'
-import React,{useState} from 'react'
-import ModalComp from '../components/ModalComp.js'
-import CardComp from '../components/CardComp.js'
-import { PaperProvider } from 'react-native-paper'
-import { FontAwesome, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import React from 'react'
+import { StyleSheet, View, Alert } from 'react-native'
+import * as SMS from 'expo-sms'; 
+import SOS from './SOSCard'; 
 
+const Help=() => {
+  const sendSmsAlert=async () => {
+    const isAvailable=await SMS.isAvailableAsync();
 
+    if (isAvailable) {
+      const emergencyContacts = ['9876543210', '1234567890']; 
+      const message = "SOS! I need help. This is an emergency.";
 
-const Help = ({navigation}) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const showModal = () => setModalVisible(true);
-  const hideModal = () => setModalVisible(false);
+      const { result }=await SMS.sendSMSAsync(
+        emergencyContacts,
+        message
+      );
+
+      if (result === 'sent') {
+        console.log("Message sent");
+      } else {
+        console.log("Message cancelled");
+      }
+    } else {
+      Alert.alert("Error", "SMS service is not available on this device.");
+    }
+  }
+
   
-
-
-
-
   return (
-    <>
-
-    <PaperProvider>
-      <View style={styles.container}>
-      <CardComp title="Video Recording" onPress={showModal} />
-      <CardComp title="Emergency Contacts" onPress={showModal} />
-
-        
-      </View>
-    </PaperProvider>
-    </>
-   
+    <View style={styles.container}>
+      <SOS onPress={sendSmsAlert} />
+    </View>
   )
 }
-
-export default Help
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f8f9fa',
+    justifyContent: 'center',
+    padding: 20,
   },
-});
+})
 
-  
+export default Help

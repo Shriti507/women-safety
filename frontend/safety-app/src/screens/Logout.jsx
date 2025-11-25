@@ -20,11 +20,8 @@ const Logout = () => {
     
         const handleLogout = async () => {
             try {
-                // 2. Call logout. This sets 'user' to null in App.js
                 await logout(); 
-                
-                // 3. STOP! Do NOT write navigation.navigate("Login") here.
-                // App.js will see user is null and automatically swap to AuthNavigation.
+
             } catch (e) {
                 console.error(e);
             }
