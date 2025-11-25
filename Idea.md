@@ -35,8 +35,7 @@ A mobile-based Women’s Safety Application designed to deliver immediate, relia
    * React Native
 
 * 🧠 Backend (Server-side):
-   * Node.js
-   * MySQL/ Firebase 
+   * Supabase
 
 **8. Expected Outcome**
 
