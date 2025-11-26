@@ -11,6 +11,7 @@ import HelpLine from '../screens/HelpLine';
 import Logout from '../screens/Logout';
 import ContactsScreen from '../screens/ContactsScreen';
 import VideoRecordingScreen from '../screens/VideoRecordingScreen'
+import CustomHeader from '../components/CustomHeader'
 
 const Drawer=createDrawerNavigator()
 const DrawerNavigator = () => {
@@ -19,7 +20,10 @@ const DrawerNavigator = () => {
       drawerActiveBackgroundColor:'#caf0f8',
     }}>
     
-      <Drawer.Screen name="Dashboard" component={Dashboard}/>
+      <Drawer.Screen name="Dashboard" component={Dashboard} options={{
+        drawerItemStyle:{display:'none'},
+        headerTitle:(props)=><CustomHeader {...props}/>
+      }}/>
       <Drawer.Screen name="MyProfile" component={MyProfile} 
       options={{
         drawerIcon:({color,size})=>(

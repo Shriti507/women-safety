@@ -66,7 +66,7 @@ const Dashboard = () => {
     // getPermissions().then(sub=>{
     //   subscriber=sub
     // })
-
+ 
     //adding appstate listner
     const subscription=AppState.addEventListener('change', (nextAppState) => {
       if (nextAppState === 'active') {
