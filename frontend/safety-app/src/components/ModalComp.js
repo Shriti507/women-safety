@@ -3,12 +3,12 @@ import { Modal, Portal, Text, Button } from 'react-native-paper';
 import { StyleSheet,View } from 'react-native';
 
 
-const ModalComp = ({ visible, hideModal,handleDelete }) => {
+const ModalComp = ({ visible, hideModal,handleDelete,onConfirmDelete }) => {
   const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10 };
 
   const handleConfirm = () => {
 
-    onConfirmDelete();
+    onConfirmDelete(handleDelete); 
     
   };
 

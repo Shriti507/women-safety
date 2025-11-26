@@ -33,7 +33,7 @@ const Logout = () => {
                 
                
                 <View style={styles.iconContainer}>
-                    <MaterialIcons name="logout" size={80} color="#FF3B30" />
+                    <MaterialIcons name="logout" size={80} color="lightblue" />
                 </View>
 
                

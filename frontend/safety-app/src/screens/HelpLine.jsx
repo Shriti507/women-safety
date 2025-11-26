@@ -31,14 +31,14 @@ const Helpline = () => {
             titleStyle={styles.cardTitle}
             subtitleStyle={styles.cardSubtitle}
             left={(props) => {
-                if (item.iconSet === 'Ionicons') {
-                            return <Ionicons name={item.iconName} size={32} color="#edafb8" style={{ marginLeft: 8 }} />;
-                } 
-                if (item.iconSet === 'FontAwesome') {
+              if (item.iconSet === 'Ionicons') {
+                    return <Ionicons name={item.iconName} size={32} color="#edafb8" style={{ marginLeft: 8 }} />;
+              } 
+              if (item.iconSet === 'FontAwesome') {
                 return <FontAwesome name={item.iconName} size={32} color="teal" style={{ marginLeft: 8 }} />;
               }
               if (item.iconSet === 'MaterialIcons') {
-                    return <MaterialIcons name={item.iconName} size={34} color="#f4a261" style={{ marginLeft: 8 }} />;
+                  return <MaterialIcons name={item.iconName} size={34} color="#f4a261" style={{ marginLeft: 8 }} />;
                 } 
            
               return (
@@ -59,28 +59,12 @@ const Helpline = () => {
             />
           )}
           />
-
-          
         </Card>
       );
 
     
   return (
    <>
-   {/* <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContent} >
-    <CardComponent title="112" subtitle="National Helpline"/>
-        <CardComponent title="108" subtitle="Ambulance"/>
-        <CardComponent title="102" subtitle="Pregnancy Medic"/>
-        <CardComponent title="101" subtitle="Fire Service"/>
-
-        <CardComponent title="100" subtitle="Police"/>
-        <CardComponent title="1091" subtitle="Women Helpline"/>
-
-        <CardComponent title="1098" subtitle="Child Helpline"/>
-        <CardComponent title="182" subtitle="Railway Protection"/>
-        <CardComponent title="181" subtitle="Domestic Abuse Helpline"/>
-   </ScrollView> */}
-   
     <View style={styles.container}>
         <FlatList
             data={emergencyNumbers}
@@ -89,10 +73,6 @@ const Helpline = () => {
             contentContainerStyle={styles.listContent}
         />
     </View>
-
-
-  
-
 
    </>
   )

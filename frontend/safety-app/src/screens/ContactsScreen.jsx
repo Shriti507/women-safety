@@ -1,68 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert, ActivityIndicator, Linking } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { supabase } from '../../utils/supabaseClient'; 
 
 export default function ContactsScreen() {
-  const [contacts, setContacts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [adding, setAdding] = useState(false); 
+  const [contacts, setContacts]=useState([]);
+  const [loading, setLoading]=useState(true);
+  const [adding, setAdding]=useState(false); 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
  
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [])
 
   const fetchContacts = async () => {
     try {
       setLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         console.log("No user logged in!");
-        setLoading(false);
-        return;
+        setLoading(false)
+        return
       }
-
-      console.log("Fetching contacts for User ID:", user.id);
-
       const { data, error } = await supabase
         .from('emergency_contacts')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
 
       if (error) {
-        console.error("Supabase Fetch Error:", error.message);
-        throw error;
+        console.error("Supabase Fetch Error:", error.message)
+        throw error
       }
-      
-      console.log("Contacts fetched:", data);
+
       setContacts(data);
+
     } catch (error) {
-      Alert.alert('Error Fetching', error.message);
+      const errorMessage = error.message || 'An unknown error occurred while fetching contacts.';
+      Alert.alert('Error Fetching', errorMessage);
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
 
   const addContact = async () => {
-    if (!name || !phone || !email) {
+    if (!name||!phone||!email) {
       Alert.alert('Missing Fields', 'Please fill in Name, Phone, and Email.');
-      return;
+      return
     }
 
     try {
       setAdding(true); 
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data:{ user } } = await supabase.auth.getUser();
       
       if (!user) {
         Alert.alert("Error", "You must be logged in to add contacts.");
-        return;
+        return
       }
-
-      console.log("Adding contact for:", user.id);
 
       const { error } = await supabase
         .from('emergency_contacts')
@@ -74,17 +69,18 @@ export default function ContactsScreen() {
         }]);
 
       if (error) {
-        console.error("Supabase Insert Error:", error.message);
-        throw error;
+        console.error("Supabase Insert Error:", error.message)
+        throw error
       }
-      setName('');
-      setPhone('');
-      setEmail('');
-      await fetchContacts();
+      setName('')
+      setPhone('')
+      setEmail('')
+      await fetchContacts()
       Alert.alert('Success', 'Contact added successfully!');
 
     } catch (error) {
-      Alert.alert('Save Error', error.message);
+      const errorMessage = error.message || 'An unknown error occurred while saving the contact.';
+      Alert.alert('Save Error', errorMessage);
     } finally {
       setAdding(false);
     }
@@ -101,15 +97,28 @@ export default function ContactsScreen() {
       fetchContacts(); 
 
     } catch (error) {
-      Alert.alert('Delete Error', error.message);
+      const errorMessage = error.message || 'An unknown error occurred while deleting the contact.';
+      Alert.alert('Delete Error', errorMessage);
     }
   };
+  
+  const handlePress=(number)=>{
+    Linking.openURL(`tel:${number}`)
+  }
 
+  const handlePhoneChange = (text) => {
+    const cleanText = text.replace(/[^0-9+\(\) -]/g, ''); 
+    setPhone(cleanText);
+  }
+  
   const renderItem = ({ item }) => (
     <View style={styles.contactCard}>
       <View style={styles.contactInfo}>
         <Text style={styles.contactName}>{item.name}</Text>
-        <Text style={styles.contactDetails}>📞 {item.phone}</Text>
+        
+        <TouchableOpacity onPress={() => handlePress(item.phone)}>
+          <Text style={styles.contactDetails}>📞 {item.phone}</Text> 
+        </TouchableOpacity>
         <Text style={styles.contactDetails}>✉️ {item.email}</Text>
       </View>
       <TouchableOpacity onPress={() => deleteContact(item.id)} style={styles.deleteBtn}>
@@ -131,9 +140,9 @@ export default function ContactsScreen() {
         <TextInput 
           style={styles.input} 
           placeholder="Phone Number" 
-          keyboardType="phone-pad"
+          keyboardType="phone-pad" 
           value={phone} 
-          onChangeText={setPhone} 
+          onChangeText={handlePhoneChange} 
         />
         <TextInput 
           style={styles.input} 
@@ -155,7 +164,9 @@ export default function ContactsScreen() {
       <Text style={styles.subHeader}>Your List</Text>
       {loading ? (
         <ActivityIndicator color="#007AFF" style={{marginTop: 20}} />
-      ) : (
+      ) 
+      : 
+      (
         <FlatList 
           data={contacts} 
           keyExtractor={(item) => item.id} 
@@ -164,7 +175,7 @@ export default function ContactsScreen() {
         />
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -232,4 +243,4 @@ const styles = StyleSheet.create({
     textAlign: 'center', 
     color: '#999', 
     marginTop: 20 },
-});
+})

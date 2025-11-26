@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { Feather } from '@expo/vector-icons';
 import SOSCard from '../components/SOSCard';
 import ContactCard from '../components/ContactCard';
+import VideoCard from '../components/VideoCard';
 import { useNavigation } from '@react-navigation/native';
 
 const Help=() => {
@@ -101,7 +102,7 @@ const Help=() => {
   return (
     <View style={styles.container}>
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Emergency Help</Text>
+      
 
       
       <View style={styles.section}>
@@ -111,6 +112,10 @@ const Help=() => {
      
       <View style={styles.section}>
          <ContactCard onPress={() => navigation.navigate('Contacts')} />
+      </View>
+
+      <View style={styles.section}>
+         <VideoCard onPress={() => navigation.navigate('Video')} />
       </View>
 
      

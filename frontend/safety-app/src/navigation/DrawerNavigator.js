@@ -10,6 +10,7 @@ import Dashboard from '../screens/Dashboard'
 import HelpLine from '../screens/HelpLine';
 import Logout from '../screens/Logout';
 import ContactsScreen from '../screens/ContactsScreen';
+import VideoRecordingScreen from '../screens/VideoRecordingScreen'
 
 const Drawer=createDrawerNavigator()
 const DrawerNavigator = () => {
@@ -85,6 +86,18 @@ const DrawerNavigator = () => {
 <Drawer.Screen 
         name="Contacts" 
         component={ContactsScreen} 
+        options={{
+          drawerLabel:()=>null, 
+          title:null, 
+          drawerIcon:()=>null, 
+          drawerItemStyle:{display:'none' } 
+        }}
+      />
+
+    
+<Drawer.Screen 
+        name="Video" 
+        component={VideoRecordingScreen} 
         options={{
           drawerLabel:()=>null, 
           title:null, 
