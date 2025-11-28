@@ -26,7 +26,7 @@ const Help=() => {
         locationSubscription.current.remove();
       }
     }
-  }, [])
+  },[])
 
   
 
@@ -39,7 +39,6 @@ const Help=() => {
         Alert.alert("Error", "SMS service is not available on this device.")
         setLoading(false)
        
-
       }
       else{
         let currentLocation=await Location.getCurrentPositionAsync({

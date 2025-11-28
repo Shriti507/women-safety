@@ -15,7 +15,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "This app needs your location to show you on the map and for safety features."
+        "NSLocationWhenInUseUsageDescription": "This app needs your location to show you on the map and for safety features.",
+        "NSPhotoLibraryAddUsageDescription": "This app needs access to save recorded videos."
       }
     },
     "android": {

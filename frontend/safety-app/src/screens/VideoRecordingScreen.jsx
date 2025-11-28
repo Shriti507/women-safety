@@ -1,204 +1,106 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
-import { CameraView, useCameraPermissions, useMicrophonePermissions } from 'expo-camera'; 
-import { Video } from 'expo-av';
-import * as MediaLibrary from 'expo-media-library';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import React,{useState,useRef,useEffect} from "react"
+import {View,Text,Button,StyleSheet} from "react-native"
+import {CameraView,useCameraPermissions,useMicrophonePermissions} from "expo-camera"
+import {Video} from "expo-av"
+import * as MediaLibrary from "expo-media-library"
 
-export default function VideoRecordingScreen({ navigation }) {
-  // Use modern hooks for permissions
-  const [cameraPermission, requestCameraPermission]=useCameraPermissions();
-  const [microphonePermission, requestMicrophonePermission]=useMicrophonePermissions();
-  const [mediaLibraryPermission, requestMediaLibraryPermission]=MediaLibrary.usePermissions();
+export default function VideoRecordingScreen() {
+  const[cameraPermission,requestCameraPermission]=useCameraPermissions()
+  const[microphonePermission,requestMicrophonePermission]=useMicrophonePermissions()
+  const[mediaPermission]=MediaLibrary.usePermissions()
 
-  const [isRecording, setIsRecording] = useState(false);
-  const [facing, setFacing] = useState('back');
-  
-  const cameraRef = useRef(null);
-  useEffect(() => {
-    (async () => {
-      if (!cameraPermission){
-       await requestCameraPermission()
-      }
-        
-      if (!microphonePermission){
-       await requestMicrophonePermission()
-      }
-      if (!mediaLibraryPermission){
-      await requestMediaLibraryPermission()
-      }
-        
-    })
-    ()
-  }, [])
+  const[video,setVideo]=useState(null)
+  const[isRecording,setIsRecording]=useState(false)
 
+  const cameraRef=useRef(null)
 
-  if (!cameraPermission||!microphonePermission) {
-   
-    return <View style={styles.container}><Text style={{color:'white'}}>Requesting permissions...</Text></View>;
-  }
+  useEffect(()=>{
+    ;(async()=>{
+      if(!cameraPermission?.granted)await requestCameraPermission()
+      if(!microphonePermission?.granted)await requestMicrophonePermission()
+    })()
+  },[])
 
-  if (!cameraPermission.granted||!microphonePermission.granted) {
-    return (
-      <View style={styles.container}>
-        <Text style={{color:'white'}}>No access to camera or microphone</Text>
-        <TouchableOpacity onPress={requestCameraPermission} style={styles.permissionButton}>
-           <Text style={styles.permissionText}>Grant Permission</Text>
-        </TouchableOpacity>
+  if(!cameraPermission||!microphonePermission){
+    return(
+      <View style={styles.center}>
+        <Text>Requesting permissions...</Text>
       </View>
-    );
+    )
   }
 
-  const startRecording = async () => {
-    if (cameraRef.current) {
-      try {
-        setIsRecording(true);
-        const data = await cameraRef.current.recordAsync({
-          maxDuration: 120, 
-        });
-        
-        saveVideo(data.uri);
-      } catch (error) {
-        console.warn(error);
-        setIsRecording(false);
-      }
-    }
-  };
+  if(!cameraPermission.granted){
+    return(
+      <View style={styles.center}>
+        <Text>Camera permission required</Text>
+        <Button title="Grant Permission" onPress={requestCameraPermission}/>
+      </View>
+    )
+  }
 
-  const stopRecording = () => {
-    if (cameraRef.current && isRecording) {
-      cameraRef.current.stopRecording();
-      setIsRecording(false);
-    }
-  };
+  const startRecording=async()=>{
+    setIsRecording(true)
+    const recording=await cameraRef.current.recordAsync({
+      quality:"1080p",
+      maxDuration:60
+    })
+    setVideo(recording)
+    setIsRecording(false)
+  }
 
-  const saveVideo = async(uri) => {
-    try {
-      if (mediaLibraryPermission?.granted) {
-        const asset = await MediaLibrary.createAssetAsync(uri);
-        await MediaLibrary.createAlbumAsync('Suraksha Evidence', asset, false);
-        Alert.alert("Saved", "Video saved to your gallery.");
-      } else {
-        Alert.alert("Permission required", "Cannot save video without gallery permission.");
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert("Error", "Could not save video.");
-    }
-  };
+  const stopRecording=()=>{
+    cameraRef.current.stopRecording()
+    setIsRecording(false)
+  }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <CameraView 
-        style={styles.camera} 
-        facing={facing} 
-        mode="video"    
-        ref={cameraRef}
-      >
-        <View style={styles.buttonContainer}>
-         
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => {
-              setFacing(current => (current==='back'?'front':'back'));
-            }}>
-            <MaterialIcons name="flip-camera-ios" size={30} color="white" />
-          </TouchableOpacity>
+  const saveVideo=async()=>{
+    await MediaLibrary.saveToLibraryAsync(video.uri)
+    setVideo(null)
+  }
 
-          <TouchableOpacity
-            style={[styles.recordButton,isRecording?styles.recording:null]}
-            onPress={isRecording ? stopRecording : startRecording}
-          >
-            <View style={styles.innerRecordButton} />
-          </TouchableOpacity>
+  if(video){
+    return(
+      <View style={styles.container}>
+        <Video
+          style={styles.video}
+          source={{uri:video.uri}}
+          useNativeControls
+          resizeMode="contain"
+        />
+        <Button title="Save" onPress={saveVideo}/>
+        <Button title="Discard" onPress={()=>setVideo(null)}/>
+      </View>
+    )
+  }
 
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={()=>navigation.goBack()}>
-            <Ionicons name="close" size={30} color="white" />
-          </TouchableOpacity>
-        </View>
-
-        {isRecording && (
-          <View style={styles.recordingIndicator}>
-            <View style={styles.redDot} />
-            <Text style={styles.recordingText}>Recording...</Text>
-          </View>
-        )}
-      </CameraView>
-    </SafeAreaView>
-  );
+  return(
+    <CameraView ref={cameraRef} style={styles.container} mode="video" captureAudio={true}>
+      <View style={styles.btnBox}>
+        <Button
+          title={isRecording?"Stop":"Record"}
+          onPress={isRecording?stopRecording:startRecording}
+        />
+      </View>
+    </CameraView>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
+const styles=StyleSheet.create({
+  container:{
+    flex:1
   },
-  camera: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'flex-end',
+  center:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 40,
+  btnBox:{
+    position:"absolute",
+    bottom:50,
+    alignSelf:"center"
   },
-  iconButton: {
-    padding: 10,
-  },
-  recordButton: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 5,
-    borderColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  recording: {
-    borderColor: 'red',
-  },
-  innerRecordButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'red',
-  },
-  recordingIndicator: {
-    position: 'absolute',
-    top: 50,
-    alignSelf: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 10,
-    borderRadius: 20,
-  },
-  redDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: 'red',
-    marginRight: 5,
-  },
-  recordingText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  permissionButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-  },
-  permissionText: {
-    color: 'white',
-    fontSize: 16,
+  video:{
+    flex:1,
+    alignSelf:"stretch"
   }
-});
+})
