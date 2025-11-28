@@ -15,7 +15,7 @@ export default function VideoRecordingScreen() {
   const cameraRef=useRef(null)
 
   useEffect(()=>{
-    ;(async()=>{
+    (async()=>{
       if(!cameraPermission?.granted)await requestCameraPermission()
       if(!microphonePermission?.granted)await requestMicrophonePermission()
     })()
