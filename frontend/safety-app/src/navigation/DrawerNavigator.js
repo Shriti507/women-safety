@@ -24,7 +24,7 @@ const DrawerNavigator = () => {
         drawerItemStyle:{display:'none'},
         headerTitle:(props)=><CustomHeader {...props}/>
       }}/>
-      <Drawer.Screen name="MyProfile" component={MyProfile} 
+      <Drawer.Screen name="My Profile" component={MyProfile} 
       options={{
         drawerIcon:({color,size})=>(
           
